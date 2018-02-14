@@ -3,6 +3,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
+ * MyPriorityQueue is a priority queue implementation using a
+ * binary heap to order and structure the data inside of an array.
  * 
  * @author Alex Bledsoe & Anthony Trang
  * @version Feb 13, 2018
@@ -10,44 +12,54 @@ import java.util.Objects;
 public class MyPriorityQueue<T>{
 
 	//Static constants:
-	/**  */
+	/** The initial size of the array when an empty queue is instantiated. */
 	private static final int DEFAULT_SIZE = 32;
 	
 	//Instance fields:
-	/**  */
+	/** The current size of the queue. */
 	private int myCurrentSize;
-	/**  */
+	/** The generic array that stores the objects held in the queue. */
 	private T[] myArray;
 	
 	//Public methods:
 	/**
-	 * 
+	 * No-arg constructor passes null to overloaded constructor.
 	 */
-	@SuppressWarnings("unchecked")
 	public MyPriorityQueue() {
-		myCurrentSize = 0;
-		myArray = (T[]) new Object[DEFAULT_SIZE];
+		this(null);
 	}
 	
 	/**
+	 * Constructor creates:
+	 *  - An Empty queue if was null passed as an argument.
+	 *  - A queue populated by the items in the collection passed in
+	 *    if one was passed in
 	 * 
-	 * @param theCollection
+	 * @param theCollection A collection of objects to be organized into
+	 * 						a priority queue.
 	 */
 	@SuppressWarnings("unchecked")
 	public MyPriorityQueue(Collection<T> theCollection) {
-		myCurrentSize = theCollection.size();
-		myArray = (T[]) new Object[myCurrentSize + 10];
-		
-		int i = 1;
-		for (final T item : theCollection) {
-			myArray[i++] = item; 
+		if (theCollection == null) {
+			myCurrentSize = 0;
+			myArray = (T[]) new Object[DEFAULT_SIZE];
+		} else {		
+			myCurrentSize = theCollection.size();
+			myArray = (T[]) new Object[myCurrentSize + 10];
+			
+			int i = 1;
+			for (final T item : theCollection) {
+				myArray[i++] = item; 
+			}
+			buildHeap();
 		}
-		buildHeap();
 	}
 	
 	/**
+	 * Adds an object to its' proper spot in the queue, 
+	 * doubling the size of the array if needed.
 	 * 
-	 * @param theItem
+	 * @param theItem the object to add to the queue.
 	 * @throws NullPointerException if theItem parameter is null.
 	 */
 	@SuppressWarnings("unchecked")
@@ -65,8 +77,13 @@ public class MyPriorityQueue<T>{
 	}
 	
 	/**
+	 * Returns the objects at the head of the queue WITHOUT
+	 * removing it, or throws and exception if the queue is empty. 
 	 * 
-	 * @return
+	 * The object at the head of the queue always 
+	 * has the minimum value.
+	 * 
+	 * @return The object at the head of the queue.
 	 * @throws NoSuchElementException if the queue is empty.
 	 */
 	public T element() {
@@ -78,8 +95,15 @@ public class MyPriorityQueue<T>{
 	}
 	
 	/**
+	 * Returns the objects at the head of the queue AND ALSO
+	 * REMOVES IT FROM THE QUEUE, or throws and exception if the 
+	 * queue is empty. 
 	 * 
-	 * @return
+	 * The object at the head of the queue always 
+	 * has the minimum value.
+	 * 
+	 * @return The object at the head of the queue.
+	 * @throws NoSuchElementException if the queue is empty.
 	 */
 	public T remove() {
 		final T currentMin = element();
@@ -89,23 +113,24 @@ public class MyPriorityQueue<T>{
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return the current size of the queue.
 	 */
 	public int size() {
 		return myCurrentSize;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * @return true if the queue has no elements in it; false otherwise.
 	 */
 	public boolean isEmpty() {
 		return myCurrentSize == 0;
 	}
 	
 	/**
+	 * Clears the queue by setting the currents size back to 0.
 	 * 
+	 * Elements left in the array after "clearing" are effectively
+	 * gone because they will either be overwritten or ignored.
 	 */
 	public void clear() {
 		myCurrentSize = 0;
@@ -113,8 +138,13 @@ public class MyPriorityQueue<T>{
 	
 	//Private helper methods:
 	/**
+	 * Maintains binary heap order property by comparing a node's two children for the smallest, 
+	 * then comparing that child to the node. If the node is larger than the smallest child, it
+	 * is replaced by that child. This process repeats until the node has found its' proper spot
+	 * in the queue.
 	 * 
-	 * @param theHole
+	 * @param theHole The spot in the heap that needs to be filled (as an index in the array). 
+	 * 				  This hole "trickles down" until the binary heap structure property is restored.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void trickleDown(int theHole) {
@@ -136,7 +166,10 @@ public class MyPriorityQueue<T>{
 	}
 	
 	/**
+	 * Builds a heap from scratch by starting from the bottom and building up.
 	 * 
+	 * *Note there is no need perform trickleDown on a leaf node so buildHeap starts
+	 *  with the farthest node down with at least one child.
 	 */
 	private void buildHeap() {
 		for (int i = myCurrentSize / 2; i > 0; i--) {
@@ -145,7 +178,7 @@ public class MyPriorityQueue<T>{
 	}
 	
 	/**
-	 * 
+	 * Doubles the size of the array field so more objects can be stored in the queue.
 	 */
 	@SuppressWarnings("unchecked")
 	private void doubleArray() {
