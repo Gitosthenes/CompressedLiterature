@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.List;
@@ -26,22 +27,22 @@ public class Main {
 	 * @throws IOException
 	 */
 	public static void main(final String[] theArgs) throws IOException {
-		
+		System.out.println("1: " + LocalDateTime.now());//TODO
 		//Setup to read file.
-		BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream("WarAndPeace.txt")));
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream("test.txt")));
 		String message = "";
 		int c;
-		
+		System.out.println("2: " + LocalDateTime.now());//TODO
 		//Read file and turn into single string.
 		while ((c = buffer.read()) != -1) {
 			char thisChar = (char) c;
 			message += thisChar;
 		}
 		buffer.close();
-		
+		System.out.println("3: " + LocalDateTime.now());//TODO
 		//Pass string to instance of CodingTree to compress.
 		final CodingTree shrunk = new CodingTree(message);
-		
+		System.out.println("4: " + LocalDateTime.now());//TODO
 		//Output codes to text file.
 		PrintWriter writer = new PrintWriter("codes.txt", "UTF-8");
 		writer.println("{");
@@ -51,7 +52,7 @@ public class Main {
 		}
 		writer.println("}");
 		writer.close();
-		
+		System.out.println("5: " + LocalDateTime.now());//TODO
 		//Output compressed binary string to binary file.
 		OutputStream out = new FileOutputStream("output.txt");
 		byte[] b = new byte[(shrunk.bits.length() / 8) + 1];
@@ -65,7 +66,7 @@ public class Main {
 			}
 		}
 		if (currentByte.length() != 0) {
-			b[currentIndex] = Byte.parseByte(currentByte);
+			b[currentIndex] = Byte.parseByte(currentByte, 2);
 		}
 		out.write(b);
 		out.close();

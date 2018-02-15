@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,19 +26,19 @@ public class CodingTree {
 		//Initialize public fields.
 		codes = new HashMap<>();
 		bits = "";
-		
+		System.out.println("3.1: " + LocalDateTime.now());//TODO
 		/* Get character frequencies. The index represents the character's 
 		 * ASCII value, and the value stored at that index represents the
 		 * frequency of that character in the file. */
 		int[] charFrequency = getCharFrequency(theMessage);
-		
+		System.out.println("3.2: " + LocalDateTime.now());//TODO
 		/* Build a Huffman tree using the character frequencies, keeping
 		 * a reference to the root of the tree. */
 		Node root = buildHuffmanTree(charFrequency);
-		
+		System.out.println("3.3: " + LocalDateTime.now());//TODO
 		//Creates a map with the binary codes for each character.
 		writeHashMap(root, "");
-		
+		System.out.println("3.4: " + LocalDateTime.now());//TODO
 		//Uses the map of codes to convert the original string into a binary string.
 		writeBits(theMessage);
 	}
