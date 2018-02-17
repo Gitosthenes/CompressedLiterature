@@ -1,11 +1,11 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
 //import java.util.ArrayList;
 //import java.util.Arrays;
 //import java.util.List;
@@ -27,22 +27,19 @@ public class Main {
 	 * @throws IOException
 	 */
 	public static void main(final String[] theArgs) throws IOException {
-		System.out.println("1: " + LocalDateTime.now());//TODO
+		long startTime = System.nanoTime();
 		//Setup to read file.
-		BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream("test.txt")));
-		String message = "";
-		int c;
-		System.out.println("2: " + LocalDateTime.now());//TODO
+		StringBuilder sb = new StringBuilder();
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream("WarAndPeace.txt")));
 		//Read file and turn into single string.
-		while ((c = buffer.read()) != -1) {
-			char thisChar = (char) c;
-			message += thisChar;
+		while (buffer.readLine() != null) {
+			sb.append(buffer.readLine());
+			sb.append('\n');
 		}
+		String message = sb.toString(); 
 		buffer.close();
-		System.out.println("3: " + LocalDateTime.now());//TODO
 		//Pass string to instance of CodingTree to compress.
 		final CodingTree shrunk = new CodingTree(message);
-		System.out.println("4: " + LocalDateTime.now());//TODO
 		//Output codes to text file.
 		PrintWriter writer = new PrintWriter("codes.txt", "UTF-8");
 		writer.println("{");
@@ -52,7 +49,7 @@ public class Main {
 		}
 		writer.println("}");
 		writer.close();
-		System.out.println("5: " + LocalDateTime.now());//TODO
+
 		//Output compressed binary string to binary file.
 		OutputStream out = new FileOutputStream("output.txt");
 		byte[] b = new byte[(shrunk.bits.length() / 8) + 1];
@@ -70,7 +67,15 @@ public class Main {
 		}
 		out.write(b);
 		out.close();
-
+		//
+		long beforeSize = new File("WarAndPeace.txt").length();
+		long afterSize = new File("output.txt").length();
+		double ratio = ((float) afterSize) / beforeSize;
+		long endTime = System.nanoTime();
+		System.out.println("Before: " + (beforeSize / 1000) + "KB");
+		System.out.println("After: " + (afterSize / 1000) + "KB");
+		System.out.printf("Ratio: %.2f%%\n", (ratio * 100));
+		System.out.println("Time (ms): " + ((endTime - startTime) / 1000000) + "ms");
 //		testMyPriorityQueue();
 	}
 	
