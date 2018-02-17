@@ -3,46 +3,56 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * CodingTree carries out the various stages
+ * of Huffman's encoding algorithm.
  * 
- * 
- * @author Alex Bledsoe
+ * @author Alex Bledsoe & Anthony Trang
  * @version Feb 13, 2018
  */
 public class CodingTree {
 	
-	private static final int NUM_ASCII_VALUES = 256;
+	//Static constants:
+	/** The number of different characters in the extended ASCII table. */
+	private static final int NUM_ASCII_VALUES = 1112064;
 	
-	/**  */
+	//Instance fields:
+	/** A map that contains the path to each character in the Huffman Tree. */
 	public Map<Character, String> codes;
-	
-	/**  */
+	/** The original contents of the text file written in their bit codes. */
 	public String bits;
 	
 	/**
-	 * 
+	 * Constructor acts as the controller for encoding 
+	 * the message that was passed to it.
 	 */
 	public CodingTree(String theMessage) {
+		
 		//Initialize public fields.
 		codes = new HashMap<>();
 		bits = "";
-		/* Get character frequencies. The index represents the character's 
-		 * ASCII value, and the value stored at that index represents the
-		 * frequency of that character in the file. */
+		
+		// Get character frequencies.
 		int[] charFrequency = getCharFrequency(theMessage);
+		
 		/* Build a Huffman tree using the character frequencies, keeping
 		 * a reference to the root of the tree. */
 		Node root = buildHuffmanTree(charFrequency);
+		
 		//Creates a map with the binary codes for each character.
 		writeHashMap(root, "");
+		
 		//Uses the map of codes to convert the original string into a binary string.
 		writeBits(theMessage);
 	}
 
 	/**
+	 * Gets the frequency of each character in the message in the form of an array.
 	 * 
+	 * The index represents the character's  ASCII value, and the value stored 
+	 * at that index represents the frequency of that character in the message.
 	 * 
-	 * @param theMessage
-	 * @return
+	 * @param theMessage a string with all of the text form the file.
+	 * @return an array with frequencies for each character.
 	 */
 	private int[] getCharFrequency(String theMessage) {
 		int[] charFrequency = new int[NUM_ASCII_VALUES];
@@ -54,10 +64,14 @@ public class CodingTree {
 	}
 
 	/**
+	 * Creates a HuffmanTree using an array of character frequencies.
 	 * 
+	 * A single node is created and added to an ArrayList for each character.
+	 * The ArrayList is ordered using a PriorityQueue (least frequent characters have the highest priority),
+	 * and a Huffman tree is built from the queue. The root of the tree is then returned.
 	 * 
-	 * @param theCharFrequency
-	 * @return
+	 * @param theCharFrequency an array of character frequencies.
+	 * @return the root of the Huffman tree.
 	 */
 	private Node buildHuffmanTree(final int[] theCharFrequency) {
 		ArrayList<Node> nodes = new ArrayList<>();
@@ -77,9 +91,11 @@ public class CodingTree {
 	}
 	
 	/**
+	 * Recursively traverses the entire Huffman tree to create codes for each character.
+	 * Every left or right down the tree adds a '0' or '1' to the end of that character's
+	 * code (respectively) and is only added to the map when it hits a leaf (character) node.
 	 * 
-	 * 
-	 * @param root
+	 * @param root the root of the Huffman tree.
 	 */
 	private void writeHashMap(final Node theRoot, String theValue) {
 		if (!theRoot.isLeaf()) {
@@ -91,9 +107,10 @@ public class CodingTree {
 	}
 	
 	/**
+	 * Writes a new string identical to the original message, but using 
+	 * a character's bit code instead of the character itself.
 	 * 
-	 * 
-	 * @param theMessage
+	 * @param theMessage a string with all of the text form the file.
 	 */
 	private void writeBits(String theMessage) {
 		StringBuilder sb = new StringBuilder();
@@ -104,18 +121,29 @@ public class CodingTree {
 		bits = sb.toString();
 	}
 	
+	/**
+	 * A Node object holds information on the frequency of
+	 * a specific character in the text file, including the
+	 * character itself and the amount of times it appears
+	 * in the file.
+	 *
+	 * @author Alex Bledsoe & Anthony Trang
+	 * @version Feb 13, 2018
+	 */
 	public class Node implements Comparable<Node> {
 		
-		/**  */
+		//Instance fields:
+		/** The character this node is keeping track of. */
 		private char myChar;
-		/** */
+		/** The number of times myChar shows up in the file. */
 		private int myCount;
-		/**  */
+		/** The left child of this node. */
 		private final Node myLeft;
-		/**  */
+		/** The right child of this node. */
 		private final Node myRight;
 		
 		/**
+		 * Constructor passes its' parameters to the overloaded constructor.
 		 * 
 		 * @param theChar
 		 * @param theCount
@@ -124,6 +152,14 @@ public class CodingTree {
 			this(theChar, theCount, null, null);
 		}
 		
+		/**
+		 * Overloaded constructor initializes the instance fields.
+		 * 
+		 * @param theChar the character this node is counting.
+		 * @param theCount the frequency of that character.
+		 * @param theLeft the left child of this node.
+		 * @param theRight the right child of this node.
+		 */
 		public Node(char theChar, int theCount, Node theLeft, Node theRight) {
 			myChar = theChar;
 			myCount = theCount;
@@ -131,48 +167,37 @@ public class CodingTree {
 			myRight = theRight;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
+		/** @return The character this node is counting. */
 		public char getChar() {
 			return myChar;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
+		/** @return The number of times the character shows up in the file. */
 		public int getCount() {
 			return myCount;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
+		/** @return The left child of this node. */
 		public Node getLeft() {
 			return myLeft;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
+		/** @return The right child of this node. */
 		public Node getRight() {
 			return myRight;
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
+		/** @return true if this node has no children; false otherwise. */
 		public boolean isLeaf() {
 			return (myLeft == null && myRight == null);
 		}
 
 		/**
+		 * Compares the count field with another node.
 		 * 
+		 * @return a negative number if this node's count is less than the other node's.
+		 * 		   a positive number if this node's count is greater than the other node's.
+		 * 		   0 if the two nodes have the same count.
 		 */
 		@Override
 		public int compareTo(final Node theOther) {

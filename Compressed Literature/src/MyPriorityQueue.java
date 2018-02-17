@@ -126,16 +126,6 @@ public class MyPriorityQueue<T>{
 		return myCurrentSize == 0;
 	}
 	
-	/**
-	 * Clears the queue by setting the currents size back to 0.
-	 * 
-	 * Elements left in the array after "clearing" are effectively
-	 * gone because they will either be overwritten or ignored.
-	 */
-	public void clear() {
-		myCurrentSize = 0;
-	}
-	
 	//Private helper methods:
 	/**
 	 * Maintains binary heap order property by comparing a node's two children for the smallest, 
