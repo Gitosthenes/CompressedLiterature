@@ -35,7 +35,7 @@ public class Main {
 		
 		//Setup to read file.
 		StringBuilder sb = new StringBuilder();
-		BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream("test.txt")));
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream("WarAndPeace.txt")));
 		
 		//Read file and turn into single string.
 		while (buffer.readLine() != null) {
@@ -77,7 +77,7 @@ public class Main {
 		out.close();
 		
 		//Display statistics in console window.		
-		long beforeSize = new File("test.txt").length();
+		long beforeSize = new File("WarAndPeace.txt").length();
 		long afterSize = new File("compressed.txt").length();
 		double ratio = ((float) afterSize) / beforeSize;
 		long endTime = System.nanoTime();
