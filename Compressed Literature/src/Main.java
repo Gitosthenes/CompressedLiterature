@@ -84,7 +84,7 @@ public class Main {
 		System.out.printf("Before: %,d bytes\n", beforeSize);
 		System.out.printf("After: %,d bytes\n", afterSize);
 		System.out.printf("Ratio: %.2f%%\n", (ratio * 100));
-		System.out.println("Time (ms): " + ((endTime - startTime) / 1000000) + "ms");
+		System.out.printf("Time (ms): %,d ms", ((endTime - startTime) / 1000000));
 		
 //		testMyPriorityQueue();
 	}
